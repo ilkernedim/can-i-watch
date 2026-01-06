@@ -58,7 +58,7 @@ export async function getMediaDetails(type: 'movie' | 'tv', id: string) {
   });
 }
 
-export async function getGenres(type: 'movie' | 'tv') {
+export async function getGenres(type: 'movie' | 'tv' = 'movie') {
   return fetchFromApi(`genre/${type}/list`);
 }
 

@@ -54,7 +54,7 @@ export async function discoverMedia(type: 'movie' | 'tv', genreId?: number, page
 
 export async function getMediaDetails(type: 'movie' | 'tv', id: string) {
   return fetchFromApi(`${type}/${id}`, {
-    append_to_response: 'credits,videos,similar,external_ids'
+    append_to_response: 'credits,videos,similar,external_ids,images,watch/providers' 
   });
 }
 
@@ -74,4 +74,8 @@ export async function getPersonCredits(id: string) {
 
 export async function getTopTVShows(page = 1) {
   return fetchFromApi('tv/top_rated', { page });
+}
+
+export async function getWatchProviders(type: 'movie' | 'tv', id: number) {
+    return fetchFromApi(`${type}/${id}/watch/providers`);
 }

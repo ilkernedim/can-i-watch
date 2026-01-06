@@ -11,35 +11,41 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   let results = [];
   let displayQuery = "";
 
+  
   if (q) {
     const data = await searchMulti(q);
     results = data.results || [];
     displayQuery = q;
-  } else if (type === 'movie') {
+  } 
+ 
+  else if (type === 'movie') {
     const data = await discoverMedia('movie');
+    
     results = (data.results || []).map((item: any) => ({ ...item, media_type: 'movie' }));
     displayQuery = "Popular Movies";
-  } else if (type === 'tv') {
+  } 
+  
+  else if (type === 'tv') {
     const data = await discoverMedia('tv');
     results = (data.results || []).map((item: any) => ({ ...item, media_type: 'tv' }));
     displayQuery = "Popular TV Shows";
-  } else {
+  } 
+  
+  else {
     const data = await searchMulti("Avengers");
     results = data.results || [];
-    displayQuery = "Avengers";
+    displayQuery = "Trending";
   }
 
   const genreData = await getGenres('movie');
 
-  const filteredResults = results.filter((item: any) => 
-    item.media_type === 'movie' || item.media_type === 'tv'
-  );
-
+  
   return (
     <SearchClient 
-        initialResults={filteredResults} 
+        initialResults={results} 
         initialQuery={displayQuery}
         genres={genreData.genres || []}
+        // Eğer linkten geldiyse filtreyi otomatik seçili yap
         initialType={type === 'movie' || type === 'tv' ? type : 'all'}
     />
   );

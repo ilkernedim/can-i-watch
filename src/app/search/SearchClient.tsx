@@ -25,12 +25,27 @@ interface SearchClientProps {
 
 export default function SearchClient({ initialResults, initialQuery, genres, initialType }: SearchClientProps) {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState(initialQuery === "Popular Movies" || initialQuery === "Popular TV Shows" ? "" : initialQuery);
   
-  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>(initialType);
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [minRating, setMinRating] = useState(0);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [yearRange, setYearRange] = useState<[number, number]>([1990, 2026]);
+
+  
+  useEffect(() => {
+    
+    setSearchQuery(initialQuery === "Popular Movies" || initialQuery === "Popular TV Shows" || initialQuery === "Trending" ? "" : initialQuery);
+    
+    
+    setContentType(initialType);
+    
+    
+    setMinRating(0);
+    setSelectedGenres([]);
+    setYearRange([1990, 2026]);
+  }, [initialQuery, initialType]); 
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,9 +62,13 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
 
   const filteredResults = useMemo(() => {
     return initialResults.filter((item: any) => {
+      
       if (contentType !== 'all' && item.media_type !== contentType) return false;
+      
+      
       if (item.vote_average < minRating) return false;
 
+      
       const releaseDate = item.release_date || item.first_air_date;
       const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : 0;
       if (year < yearRange[0] || year > yearRange[1]) return false;
@@ -71,6 +90,10 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
     setYearRange([1990, 2026]);
   };
 
+  
+  const isMovieActive = contentType === 'movie';
+  const isTvActive = contentType === 'tv';
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#050505] text-white font-display overflow-x-hidden selection:bg-primary/30">
       
@@ -86,8 +109,8 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
               </h2>
             </Link>
             <nav className="hidden lg:flex items-center gap-8">
-              <Link href="/search?type=movie" className={`text-sm font-medium transition-colors ${contentType === 'movie' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Movies</Link>
-              <Link href="/search?type=tv" className={`text-sm font-medium transition-colors ${contentType === 'tv' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>TV Shows</Link>
+              <Link href="/search?type=movie" className={`text-sm font-medium transition-colors ${isMovieActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Movies</Link>
+              <Link href="/search?type=tv" className={`text-sm font-medium transition-colors ${isTvActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>TV Shows</Link>
               <Link className="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="/watchlist">My List</Link>
             </nav>
           </div>
@@ -164,13 +187,13 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Content Type</h3>
               <div className="flex bg-black/40 p-1 rounded-lg border border-white/5">
                 <button 
-                    onClick={() => setContentType('movie')} 
+                    onClick={() => { setContentType('movie'); router.push('/search?type=movie'); }} 
                     className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${contentType === 'movie' ? 'bg-[#222] text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
                 >
                     Movies
                 </button>
                 <button 
-                    onClick={() => setContentType('tv')} 
+                    onClick={() => { setContentType('tv'); router.push('/search?type=tv'); }} 
                     className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${contentType === 'tv' ? 'bg-[#222] text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
                 >
                     TV Shows

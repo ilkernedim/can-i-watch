@@ -39,8 +39,8 @@ export default async function TVPage({ params }: { params: Promise<{ id: string 
             </h2>
           </Link>
           <div className="hidden md:flex items-center gap-9">
-            <Link className="text-white text-sm font-medium hover:text-primary transition-colors" href="/">Movies</Link>
-            <Link className="text-white text-sm font-medium hover:text-primary transition-colors" href="/">TV Shows</Link>
+            <Link className="text-white text-sm font-medium hover:text-primary transition-colors" href="/search?type=movie">Movies</Link>
+            <Link className="text-white text-sm font-medium hover:text-primary transition-colors" href="/search?type=tv">TV Shows</Link>
             <Link className="text-white text-sm font-medium hover:text-primary transition-colors" href="/watchlist">My Watchlist</Link>
           </div>
         </div>

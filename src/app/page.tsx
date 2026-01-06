@@ -29,9 +29,9 @@ export default async function Home() {
             <h2 className="text-xl font-bold tracking-tight text-white">Can I Watch?</h2>
           </div>
           <nav className="hidden md:flex items-center gap-8">
-              <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/search?q=movie">Movies</Link>
-              <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/search?q=tv">TV Shows</Link>
-              <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/watchlist">My Watchlist</Link>
+            <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/search?type=movie">Movies</Link>
+            <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/search?type=tv">TV Shows</Link>
+            <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/watchlist">My Watchlist</Link>
           </nav>
           <div className="flex items-center gap-4">
             <button className="hidden sm:flex text-slate-400 hover:text-white transition-colors">

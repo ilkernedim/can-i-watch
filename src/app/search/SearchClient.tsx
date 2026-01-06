@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -20,20 +20,23 @@ interface SearchClientProps {
   initialResults: any[];
   initialQuery: string;
   genres: any[];
+  initialType: 'all' | 'movie' | 'tv';
 }
 
-export default function SearchClient({ initialResults, initialQuery, genres }: SearchClientProps) {
+export default function SearchClient({ initialResults, initialQuery, genres, initialType }: SearchClientProps) {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [searchQuery, setSearchQuery] = useState(initialQuery === "Popular Movies" || initialQuery === "Popular TV Shows" ? "" : initialQuery);
   
-  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
+  const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>(initialType);
   const [minRating, setMinRating] = useState(0);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [yearRange, setYearRange] = useState<[number, number]>([1990, 2026]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/search?q=${searchQuery}`);
+    if (searchQuery.trim()) {
+        router.push(`/search?q=${searchQuery}`);
+    }
   };
 
   const toggleGenre = (id: number) => {
@@ -45,7 +48,6 @@ export default function SearchClient({ initialResults, initialQuery, genres }: S
   const filteredResults = useMemo(() => {
     return initialResults.filter((item: any) => {
       if (contentType !== 'all' && item.media_type !== contentType) return false;
-      
       if (item.vote_average < minRating) return false;
 
       const releaseDate = item.release_date || item.first_air_date;
@@ -80,12 +82,12 @@ export default function SearchClient({ initialResults, initialQuery, genres }: S
                 <Play className="fill-current w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold leading-tight tracking-tight">
-                StreamGuide
+                Can I Watch?
               </h2>
             </Link>
             <nav className="hidden lg:flex items-center gap-8">
-              <button onClick={() => setContentType('movie')} className={`text-sm font-medium transition-colors ${contentType === 'movie' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Movies</button>
-              <button onClick={() => setContentType('tv')} className={`text-sm font-medium transition-colors ${contentType === 'tv' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>TV Shows</button>
+              <Link href="/search?type=movie" className={`text-sm font-medium transition-colors ${contentType === 'movie' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Movies</Link>
+              <Link href="/search?type=tv" className={`text-sm font-medium transition-colors ${contentType === 'tv' ? 'text-white' : 'text-gray-400 hover:text-white'}`}>TV Shows</Link>
               <Link className="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="/watchlist">My List</Link>
             </nav>
           </div>
@@ -297,7 +299,7 @@ export default function SearchClient({ initialResults, initialQuery, genres }: S
               <Play className="fill-current text-gray-400 w-4 h-4" />
             </div>
             <p className="text-gray-500 text-sm font-medium">
-              © 2026 StreamGuide Inc.
+              © 2026 Can I Watch?
             </p>
           </div>
           <div className="flex gap-8 text-sm text-gray-500 font-medium">

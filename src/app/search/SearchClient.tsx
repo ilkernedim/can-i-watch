@@ -15,6 +15,7 @@ import {
   Tv
 } from "lucide-react";
 import ProviderIcons from '@/components/ProviderIcons';
+import ProviderSelector from '@/components/ProviderSelector';
 
 interface SearchClientProps {
   initialResults: any[];
@@ -26,26 +27,19 @@ interface SearchClientProps {
 export default function SearchClient({ initialResults, initialQuery, genres, initialType }: SearchClientProps) {
   const router = useRouter();
   
-  
   const [searchQuery, setSearchQuery] = useState("");
   const [contentType, setContentType] = useState<'all' | 'movie' | 'tv'>('all');
   const [minRating, setMinRating] = useState(0);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [yearRange, setYearRange] = useState<[number, number]>([1990, 2026]);
 
-  
   useEffect(() => {
-    
     setSearchQuery(initialQuery === "Popular Movies" || initialQuery === "Popular TV Shows" || initialQuery === "Trending" ? "" : initialQuery);
-    
-    
     setContentType(initialType);
-    
-    
     setMinRating(0);
     setSelectedGenres([]);
     setYearRange([1990, 2026]);
-  }, [initialQuery, initialType]); 
+  }, [initialQuery, initialType]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,13 +56,10 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
 
   const filteredResults = useMemo(() => {
     return initialResults.filter((item: any) => {
-      
       if (contentType !== 'all' && item.media_type !== contentType) return false;
-      
       
       if (item.vote_average < minRating) return false;
 
-      
       const releaseDate = item.release_date || item.first_air_date;
       const year = releaseDate ? parseInt(releaseDate.split('-')[0]) : 0;
       if (year < yearRange[0] || year > yearRange[1]) return false;
@@ -90,7 +81,6 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
     setYearRange([1990, 2026]);
   };
 
-  
   const isMovieActive = contentType === 'movie';
   const isTvActive = contentType === 'tv';
 
@@ -111,7 +101,7 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
             <nav className="hidden lg:flex items-center gap-8">
               <Link href="/search?type=movie" className={`text-sm font-medium transition-colors ${isMovieActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>Movies</Link>
               <Link href="/search?type=tv" className={`text-sm font-medium transition-colors ${isTvActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>TV Shows</Link>
-              <Link className="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="/watchlist">My List</Link>
+              <Link className="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="/watchlist">My Watchlist</Link>
             </nav>
           </div>
           
@@ -131,6 +121,8 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
           </div>
 
           <div className="flex items-center gap-5">
+            <ProviderSelector />
+
             <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
               <Bell className="w-6 h-6" />
               <span className="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full border-2 border-[#050505] animate-pulse" />

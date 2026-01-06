@@ -45,11 +45,7 @@ export const SUPPORTED_PROVIDERS: StreamingProviderInfo[] = [
     provider_name: 'HBO Max', 
     logo_path: 'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg' 
   },
-  { 
-    provider_id: 15, 
-    provider_name: 'Hulu', 
-    logo_path: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/Hulu_Logo.svg' 
-  },
+  
   { 
     provider_id: 350, 
     provider_name: 'Apple TV+', 

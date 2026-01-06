@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getTrending, getTopTVShows, discoverMedia } from "@/lib/tmdb/client";
 import { SUPPORTED_PROVIDERS } from "@/types";
 import { Search, Film, TrendingUp, Star, PlayCircle, Calendar } from "lucide-react";
+import ProviderSelector from "@/components/ProviderSelector";
 
 export default async function Home() {
   const [trendingData, topRatedTVData, netflixData, upcomingData] = await Promise.all([
@@ -34,6 +35,8 @@ export default async function Home() {
             <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/watchlist">My Watchlist</Link>
           </nav>
           <div className="flex items-center gap-4">
+            <ProviderSelector />
+            
             <button className="hidden sm:flex text-slate-400 hover:text-white transition-colors">
               <Search className="w-6 h-6" />
             </button>

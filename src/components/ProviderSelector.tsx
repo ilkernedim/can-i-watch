@@ -18,8 +18,10 @@ export default function ProviderSelector() {
   const [selectedProviders, setSelectedProviders] = useState<number[]>([]);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('my_providers') || '[]');
-    setSelectedProviders(saved);
+    if (typeof window !== 'undefined') {
+      const saved = JSON.parse(localStorage.getItem('my_providers') || '[]');
+      setSelectedProviders(saved);
+    }
   }, []);
 
   const toggleProvider = (id: number) => {
@@ -55,8 +57,8 @@ export default function ProviderSelector() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-[#121212] border border-white/10 rounded-2xl shadow-2xl overflow-hidden scale-100 animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[9999] h-screen w-screen flex items-center justify-center bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-[#121212] border border-white/10 rounded-2xl shadow-2xl overflow-hidden scale-100 animate-in zoom-in-95 duration-200 mx-4">
             
             <div className="flex items-center justify-between p-5 border-b border-white/5 bg-[#161616]">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -86,7 +88,7 @@ export default function ProviderSelector() {
                                     : 'bg-[#1a1a1a] border-white/5 hover:border-white/20'
                                 }`}
                             >
-                                <div className="relative w-12 h-12 rounded-lg overflow-hidden shadow-lg">
+                                <div className="relative w-12 h-12 rounded-lg overflow-hidden shadow-lg bg-black">
                                     <Image 
                                         src={`https://image.tmdb.org/t/p/original${provider.logo}`}
                                         alt={provider.name}

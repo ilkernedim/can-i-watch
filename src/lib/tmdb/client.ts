@@ -1,12 +1,10 @@
 import { Movie } from '@/types';
 
-
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const TMDB_DIRECT_URL = 'https://api.themoviedb.org/3';
 const PROXY_URL = '/api/tmdb';
 
 async function fetchFromApi(endpoint: string, params: Record<string, string | number> = {}) {
-  
   const isServer = typeof window === 'undefined';
 
   let url = '';
@@ -15,11 +13,9 @@ async function fetchFromApi(endpoint: string, params: Record<string, string | nu
   );
 
   if (isServer) {
-    
     url = `${TMDB_DIRECT_URL}/${endpoint}`;
     queryParams.append('api_key', API_KEY || '');
   } else {
-    
     url = PROXY_URL;
     queryParams.append('endpoint', endpoint);
   }
@@ -32,14 +28,11 @@ async function fetchFromApi(endpoint: string, params: Record<string, string | nu
     });
 
     if (!res.ok) {
-        
-        console.error(`API Error (${isServer ? 'Server' : 'Client'}): ${res.status} on ${endpoint}`);
         throw new Error(`Fetch failed: ${res.status}`);
     }
   
     return res.json();
   } catch (error) {
-    console.error("Fetch function error:", error);
     throw error;
   }
 }
@@ -65,7 +58,6 @@ export async function getMediaDetails(type: 'movie' | 'tv', id: string) {
   });
 }
 
-
 export async function getGenres(type: 'movie' | 'tv') {
   return fetchFromApi(`genre/${type}/list`);
 }
@@ -74,4 +66,12 @@ export async function getPersonDetails(id: string) {
     return fetchFromApi(`person/${id}`, {
         append_to_response: 'combined_credits,external_ids'
     });
+}
+
+export async function getPersonCredits(id: string) {
+  return fetchFromApi(`person/${id}/combined_credits`);
+}
+
+export async function getTopTVShows(page = 1) {
+  return fetchFromApi('tv/top_rated', { page });
 }

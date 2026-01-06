@@ -4,7 +4,7 @@ A modern, high-performance web application designed to help users discover movie
 
 Built with **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**.
 
-![Project Screenshot](./public/screenshot.png)
+![Project Screenshot](./public/preview.png)
 
 ## 🚀 Features
 

@@ -19,7 +19,7 @@ async function fetchFromApi(endpoint: string, params: Record<string, string | nu
     url = `${TMDB_DIRECT_URL}/${endpoint}`;
     queryParams.append('api_key', API_KEY || '');
   } else {
-  
+    
     url = PROXY_URL;
     queryParams.append('endpoint', endpoint);
   }
@@ -28,20 +28,18 @@ async function fetchFromApi(endpoint: string, params: Record<string, string | nu
 
   try {
     const res = await fetch(finalUrl, {
-      
       next: { revalidate: 3600 } 
     });
 
     if (!res.ok) {
-        console.error(`API Error (${isServer ? 'Server' : 'Client'}): ${res.status} on ${endpoint}`);
         
+        console.error(`API Error (${isServer ? 'Server' : 'Client'}): ${res.status} on ${endpoint}`);
         throw new Error(`Fetch failed: ${res.status}`);
     }
   
     return res.json();
   } catch (error) {
     console.error("Fetch function error:", error);
-    
     throw error;
   }
 }
@@ -67,6 +65,10 @@ export async function getMediaDetails(type: 'movie' | 'tv', id: string) {
   });
 }
 
+
+export async function getGenres(type: 'movie' | 'tv') {
+  return fetchFromApi(`genre/${type}/list`);
+}
 
 export async function getPersonDetails(id: string) {
     return fetchFromApi(`person/${id}`, {

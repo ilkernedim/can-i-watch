@@ -1,22 +1,49 @@
 import { Movie } from '@/types';
 
-const BASE_URL = '/api/tmdb';
+
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const TMDB_DIRECT_URL = 'https://api.themoviedb.org/3';
+const PROXY_URL = '/api/tmdb';
 
 async function fetchFromApi(endpoint: string, params: Record<string, string | number> = {}) {
-  const query = new URLSearchParams({
-    endpoint,
-    ...Object.fromEntries(
-        Object.entries(params).map(([key, val]) => [key, String(val)])
-    ),
-  });
+  
+  const isServer = typeof window === 'undefined';
 
-  const res = await fetch(`${BASE_URL}?${query.toString()}`);
+  let url = '';
+  let queryParams = new URLSearchParams(
+      Object.entries(params).map(([key, val]) => [key, String(val)])
+  );
+
+  if (isServer) {
+    
+    url = `${TMDB_DIRECT_URL}/${endpoint}`;
+    queryParams.append('api_key', API_KEY || '');
+  } else {
   
-  if (!res.ok) {
-    throw new Error(`API Error: ${res.status}`);
+    url = PROXY_URL;
+    queryParams.append('endpoint', endpoint);
   }
+
+  const finalUrl = `${url}?${queryParams.toString()}`;
+
+  try {
+    const res = await fetch(finalUrl, {
+      
+      next: { revalidate: 3600 } 
+    });
+
+    if (!res.ok) {
+        console.error(`API Error (${isServer ? 'Server' : 'Client'}): ${res.status} on ${endpoint}`);
+        
+        throw new Error(`Fetch failed: ${res.status}`);
+    }
   
-  return res.json();
+    return res.json();
+  } catch (error) {
+    console.error("Fetch function error:", error);
+    
+    throw error;
+  }
 }
 
 export async function getTrending(page = 1) {
@@ -38,4 +65,11 @@ export async function getMediaDetails(type: 'movie' | 'tv', id: string) {
   return fetchFromApi(`${type}/${id}`, {
     append_to_response: 'credits,videos,similar,external_ids'
   });
+}
+
+
+export async function getPersonDetails(id: string) {
+    return fetchFromApi(`person/${id}`, {
+        append_to_response: 'combined_credits,external_ids'
+    });
 }

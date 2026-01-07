@@ -15,7 +15,7 @@ import {
   Tv
 } from "lucide-react";
 import ProviderIcons from '@/components/ProviderIcons';
-import ProviderSelector from '@/components/ProviderSelector';
+
 
 interface SearchClientProps {
   initialResults: any[];
@@ -121,7 +121,7 @@ export default function SearchClient({ initialResults, initialQuery, genres, ini
           </div>
 
           <div className="flex items-center gap-5">
-            <ProviderSelector />
+            
 
             <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
               <Bell className="w-6 h-6" />

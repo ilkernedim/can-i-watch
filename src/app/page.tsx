@@ -3,14 +3,13 @@ import Link from "next/link";
 import { getTrending, getTopTVShows, discoverMedia } from "@/lib/tmdb/client";
 import { SUPPORTED_PROVIDERS } from "@/types";
 import { Search, Film, TrendingUp, Star, PlayCircle, Calendar } from "lucide-react";
-import ProviderSelector from "@/components/ProviderSelector";
 
 export default async function Home() {
   const [trendingData, topRatedTVData, netflixData, upcomingData] = await Promise.all([
     getTrending(),
     getTopTVShows(),
-    discoverMedia('tv', 10765), 
-    discoverMedia('movie') 
+    discoverMedia('tv', 10765),
+    discoverMedia('movie')
   ]);
 
   const trending = trendingData.results.slice(0, 10);
@@ -20,7 +19,6 @@ export default async function Home() {
 
   return (
     <div className="bg-background-dark text-white font-display overflow-x-hidden flex flex-col min-h-screen">
-      
       <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/90 backdrop-blur-md">
         <div className="flex items-center justify-between px-6 py-4 max-w-[1400px] mx-auto">
           <div className="flex items-center gap-4">
@@ -35,8 +33,6 @@ export default async function Home() {
             <Link className="text-sm font-medium text-slate-400 hover:text-white transition-colors" href="/watchlist">My Watchlist</Link>
           </nav>
           <div className="flex items-center gap-4">
-            <ProviderSelector />
-            
             <button className="hidden sm:flex text-slate-400 hover:text-white transition-colors">
               <Search className="w-6 h-6" />
             </button>
@@ -47,7 +43,6 @@ export default async function Home() {
           </div>
         </div>
       </header>
-
       <main className="flex-grow flex flex-col">
         <div className="relative w-full min-h-[600px] flex items-center justify-center bg-background-dark overflow-hidden">
           <div className="absolute inset-0 z-0">
@@ -58,7 +53,6 @@ export default async function Home() {
                </div>
             )}
           </div>
-          
           <div className="relative z-20 flex flex-col items-center w-full max-w-[900px] px-4 text-center gap-10 mt-[-20px]">
             <div className="flex flex-col gap-4">
               <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight drop-shadow-2xl">
@@ -68,7 +62,6 @@ export default async function Home() {
                 Where would you like to watch?
               </h2>
             </div>
-
             <div className="w-full max-w-[700px]">
               <form action="/search" className="flex w-full items-center h-14 md:h-16 bg-[#161616]/80 backdrop-blur-xl rounded-2xl border border-white/10 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/10 transition-all shadow-2xl">
                 <div className="pl-5 text-slate-400">
@@ -87,7 +80,6 @@ export default async function Home() {
                 </div>
               </form>
             </div>
-
             <div className="flex flex-col items-center gap-6 w-full animate-fade-in">
               <p className="text-xs font-bold tracking-[0.2em] text-slate-500 uppercase">Supported Platforms</p>
               <div className="flex flex-wrap justify-center gap-3 w-full max-w-[1000px]">
@@ -100,9 +92,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-12 flex flex-col gap-20">
-          
           <section className="flex flex-col gap-8">
             <div className="flex items-center gap-3">
               <span className="text-3xl animate-pulse">🔥</span>
@@ -132,7 +122,6 @@ export default async function Home() {
               </div>
             </div>
           </section>
-
           <section className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2 text-white">
@@ -140,7 +129,6 @@ export default async function Home() {
                 Trending Now
               </h2>
             </div>
-            
             <div className="flex overflow-x-auto gap-5 pb-4 no-scrollbar snap-x snap-mandatory">
               {trending.map((item: any) => (
                 <Link href={`/${item.media_type}/${item.id}`} key={item.id} className="flex flex-col gap-3 min-w-[160px] md:min-w-[200px] snap-start group/card cursor-pointer">
@@ -170,7 +158,6 @@ export default async function Home() {
               ))}
             </div>
           </section>
-
           <section className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2 text-white">
@@ -194,7 +181,6 @@ export default async function Home() {
               ))}
             </div>
           </section>
-
           <section className="flex flex-col gap-6">
              <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2 text-white">
@@ -226,7 +212,6 @@ export default async function Home() {
           </section>
         </div>
       </main>
-
       <footer className="mt-12 border-t border-white/5 py-12 bg-[#080808]">
         <div className="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-2 text-slate-400">

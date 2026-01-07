@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { getMediaDetails } from "@/lib/tmdb/client";
 import { SUPPORTED_PROVIDERS } from "@/types";
 import WatchlistButton from "@/components/WatchlistButton";
+import ShareButton from "@/components/ShareButton";
 import { 
   Play, 
-  Share2, 
   Star, 
   Tv 
 } from "lucide-react";
@@ -110,7 +110,7 @@ export default async function TVPage({ params }: { params: Promise<{ id: string 
                     ))}
                 </div>
 
-                <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex flex-wrap items-center gap-4 pt-4">
                   {trailer ? (
                     <a 
                       href={`https://www.youtube.com/watch?v=${trailer.key}`} 
@@ -139,9 +139,13 @@ export default async function TVPage({ params }: { params: Promise<{ id: string 
                     }} 
                   />
 
-                  <button className="flex items-center justify-center size-12 bg-[#283139] hover:bg-[#323d46] text-white rounded-xl font-bold transition-colors">
-                    <Share2 className="w-5 h-5" />
-                  </button>
+                  {/* YENİ PAYLAŞ BUTONU */}
+                  <div className="flex items-center justify-center h-12 w-12 bg-[#283139] hover:bg-[#323d46] rounded-xl transition-colors border border-white/5">
+                      <ShareButton 
+                        title={show.name}
+                        url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/tv/${show.id}`}
+                      />
+                  </div>
                 </div>
               </div>
             </div>

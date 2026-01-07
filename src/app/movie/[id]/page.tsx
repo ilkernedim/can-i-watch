@@ -4,9 +4,9 @@ import { notFound } from "next/navigation";
 import { getMediaDetails } from "@/lib/tmdb/client";
 import { SUPPORTED_PROVIDERS } from "@/types";
 import WatchlistButton from "@/components/WatchlistButton";
+import ShareButton from "@/components/ShareButton";
 import { 
   Play, 
-  Share2, 
   Star, 
   Film 
 } from "lucide-react";
@@ -62,6 +62,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
       </header>
 
       <main className="flex-1 flex flex-col">
+        {/* HERO SECTION */}
         <div className="relative w-full h-[60vh] md:h-[500px]">
           <div className="absolute inset-0">
              {movie.backdrop_path && (
@@ -118,7 +119,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                     ))}
                 </div>
 
-                <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex flex-wrap items-center gap-4 pt-4">
                   {trailer ? (
                     <a 
                       href={`https://www.youtube.com/watch?v=${trailer.key}`} 
@@ -147,9 +148,14 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
                     }} 
                   />
 
-                  <button className="flex items-center justify-center size-12 bg-[#283139] hover:bg-[#323d46] text-white rounded-xl font-bold transition-colors">
-                    <Share2 className="w-5 h-5" />
-                  </button>
+                  {/* YENİ PAYLAŞ BUTONU */}
+                  <div className="flex items-center justify-center h-12 w-12 bg-[#283139] hover:bg-[#323d46] rounded-xl transition-colors border border-white/5">
+                      <ShareButton 
+                        title={movie.title}
+                        url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/movie/${movie.id}`}
+                      />
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -159,6 +165,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
         <div className="container mx-auto px-4 md:px-10 py-8 md:py-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
+            {/* LEFT CONTENT */}
             <div className="lg:col-span-8 flex flex-col gap-10">
               <div className="md:hidden flex gap-4">
                 <div className="w-24 aspect-[2/3] relative rounded-lg overflow-hidden shrink-0">
@@ -223,6 +230,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
               </section>
             </div>
 
+            {/* RIGHT SIDEBAR */}
             <div className="lg:col-span-4 flex flex-col gap-8">
               
               <div className="bg-surface-dark border border-[#283139] rounded-2xl p-6 shadow-xl sticky top-24 z-30">
